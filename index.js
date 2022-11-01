@@ -14,7 +14,8 @@ const typeDefs = `
     url: String!
     name: String!
     description: String
-  }
+    category: PhotoCategory!
+  }!
 
   type Query {
     totalPhotos: Int!
@@ -29,6 +30,13 @@ const typeDefs = `
 
   type Mutation {
     postPhoto(input: PostPhotoInput!): Photo!
+  }
+
+  type User {
+    githubLogin: ID!
+    name: String
+    avatar: String
+    postedPhotos: [Photo!]!
   }
 `
 
@@ -47,11 +55,9 @@ const resolvers = {
       // 新しい写真を作成し、idを生成する
       let newPhoto = {
         id: id++,
-        ...args
+        ...args.input
       }
       photos.push(newPhoto)
-
-      // 新しい写真を返す
       return newPhoto
     }
   },
